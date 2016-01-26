@@ -23,6 +23,7 @@ type Order struct {
 	Settled    bool   `json:"settled,omitempty"`
 	DoneReason string `json:"done_reason,omitempty"`
 	CreatedAt  Time   `json:"created_at,string,omitempty"`
+	FilledSize float64 `json:"filled_size,string,omitempty"`
 }
 
 type ListOrdersParams struct {
