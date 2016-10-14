@@ -4,9 +4,11 @@ import (
 	"bytes"
 	"crypto/hmac"
 	"crypto/sha256"
+	"crypto/tls"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"net"
 	"net/http"
 	"os"
 	"strconv"
@@ -18,17 +20,31 @@ type Client struct {
 	Secret     string
 	Key        string
 	Passphrase string
+	client     *http.Client
 }
 
 func NewClient(secret, key, passphrase string) *Client {
-	client := Client{
+	dialContext := (&net.Dialer{
+		Timeout:   30 * time.Second,
+		KeepAlive: 5 * time.Minute,
+	}).DialContext
+	tr := http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: false},
+		DialContext:     dialContext,
+	}
+	client := &http.Client{
+		Transport: &tr,
+	}
+
+	apiClient := Client{
 		BaseURL:    "https://api.exchange.coinbase.com",
 		Secret:     secret,
 		Key:        key,
 		Passphrase: passphrase,
+		client:     client,
 	}
 
-	return &client
+	return &apiClient
 }
 
 func (c *Client) Request(method string, url string,
@@ -79,8 +95,7 @@ func (c *Client) Request(method string, url string,
 	}
 	req.Header.Add("CB-ACCESS-SIGN", sig)
 
-	client := http.Client{}
-	res, err = client.Do(req)
+	res, err = c.client.Do(req)
 	if err != nil {
 		return res, err
 	}
