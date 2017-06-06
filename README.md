@@ -3,7 +3,7 @@ Go Coinbase Exchange [![GoDoc](http://img.shields.io/badge/godoc-reference-blue.
 
 ## Summary
 
-Go client for [Coinbase Exchange](https://exchange.coinbase.com)
+Go client for [GDAX](https://www.gdax.com)
 
 ## Installation
 
@@ -65,7 +65,7 @@ Listen for websocket messages
   )
 
   var wsDialer ws.Dialer
-  wsConn, _, err := wsDialer.Dial("wss://ws-feed.exchange.coinbase.com", nil)
+  wsConn, _, err := wsDialer.Dial("wss://ws-feed.gdax.com", nil)
   if err != nil {
     println(err.Error())
   }

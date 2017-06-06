@@ -37,7 +37,7 @@ func NewClient(secret, key, passphrase string) *Client {
 	}
 
 	apiClient := Client{
-		BaseURL:    "https://api.exchange.coinbase.com",
+		BaseURL:    "https://api.gdax.com",
 		Secret:     secret,
 		Key:        key,
 		Passphrase: passphrase,
